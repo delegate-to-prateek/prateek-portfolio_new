@@ -3,47 +3,64 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Delegate to Prateek — Animated Portfolio</title>
-  <meta name="description" content="Delegate to Prateek — Project Coordinator & VA." />
+  <title>Delegate to Prateek — Portfolio</title>
+  <meta name="description" content="Prateek Pathak — Virtual Assistant & Project Coordinator" />
+
+  <!-- Tailwind (quick prototype CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS + Lottie (in head so custom elements register early) -->
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
 
   <style>
+    /* header hide/show */
     header.site-header { transition: transform .28s ease, box-shadow .28s ease; z-index:80; }
     header.hidden-up { transform: translateY(-120%); }
+
+    /* marquee */
     @keyframes marquee-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    .marquee { display: inline-flex; gap:2.5rem; align-items:center; width:200%; animation: marquee-left 18s linear infinite; }
+    .marquee { display: inline-flex; gap:1.5rem; align-items:center; width:200%; animation: marquee-left 18s linear infinite; }
     .marquee:hover { animation-play-state: paused; }
+
+    /* float card */
     .float { transform: translateZ(0); transition: transform .28s ease; }
-    .float:hover { transform: translateY(-8px) scale(1.01); }
+    .float:hover { transform: translateY(-6px) scale(1.01); }
+
+    /* timeline */
+    .timeline { position: relative; padding-left: 1.25rem; }
+    .timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 3px; background: linear-gradient(#e6e9ef,#f8fafc); border-radius:2px; }
+    .timeline-item { position: relative; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+    .timeline-item .dot { position: absolute; left: 6px; width:18px; height:18px; border-radius:50%; background: #7c3aed; display:flex; align-items:center; justify-content:center; color:white; font-size:10px; }
+
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased">
 
   <!-- HEADER -->
-  <header class="site-header fixed top-0 left-0 right-0 bg-white/85 backdrop-blur shadow">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+  <header class="site-header fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] md:w-4/5 lg:w-3/5 backdrop-blur bg-white/60 rounded-xl shadow-md border">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-400 flex items-center justify-center text-white font-bold">PP</div>
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold shadow">DP</div>
         <div>
           <div class="text-xs text-gray-500">Brand</div>
-          <div class="text-lg font-semibold">Delegate to Prateek</div>
+          <div class="text-sm font-semibold">Delegate to Prateek</div>
         </div>
       </div>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#about" class="hover:text-indigo-600">About</a>
-        <a href="#projects" class="hover:text-indigo-600">Portfolio</a>
-        <a href="#clients" class="hover:text-indigo-600">Clients</a>
-        <a href="#case-studies" class="hover:text-indigo-600">Case Studies</a>
-        <a href="#contact" class="hover:text-indigo-600">Contact</a>
-        <a id="topDownload" href="https://drive.google.com/uc?export=download&id=1s_Pc9gNtZn33awkQ57HSWpuasgrr1I70" class="ml-4 inline-flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white rounded">Portfolio</a>
+      <nav class="hidden md:flex gap-6 text-sm items-center">
+        <a href="#about" class="hover:text-violet-600">About</a>
+        <a href="#projects" class="hover:text-violet-600">Portfolio</a>
+        <a href="#clients" class="hover:text-violet-600">Clients</a>
+        <a href="#experience" class="hover:text-violet-600">Experience</a>
+        <a href="#contact" class="hover:text-violet-600">Contact</a>
+        <a href="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Prateek_Pathak_Portfolio.pdf" class="ml-4 inline-flex items-center gap-2 px-3 py-1.5 bg-violet-600 text-white rounded-lg text-sm shadow">Download</a>
       </nav>
 
       <div class="md:hidden">
-        <button id="mobileBtn" class="p-2 rounded hover:bg-gray-100">
+        <button id="mobileBtn" class="p-2 rounded hover:bg-gray-100" aria-label="menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#374151" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
@@ -55,160 +72,342 @@
       <a href="#about">About</a>
       <a href="#projects">Portfolio</a>
       <a href="#clients">Clients</a>
+      <a href="#experience">Experience</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
 
   <main class="pt-28">
+
     <!-- HERO -->
-    <section class="py-20">
+    <section id="hero" class="py-20">
       <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
         <div data-aos="fade-right" data-aos-delay="100">
-          <h1 class="text-4xl md:text-5xl font-extrabold">Delegate to Prateek</h1>
-          <p class="mt-4 text-lg text-gray-600 max-w-xl">I help deliver multi-discipline projects on time — accurate BOQs, clean compliance, and efficient billing. Worked with clients including Maruti Suzuki, Airtel & Reliance.</p>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Delegate To Prateek — Save hours, ship faster</h1>
+
+          <div class="mt-4 text-gray-700 space-y-4 leading-relaxed">
+            <p>Ever feel like your to-do list is never-ending?</p>
+
+            <p><strong>I'm Prateek Pathak</strong>, a Virtual Assistant dedicated to handling the tasks that take up your time — operations, client management and process improvement — so you can focus on what really matters.</p>
+
+            <p>Here’s how I can help:</p>
+
+            <ul class="list-disc ml-5 text-sm text-gray-700 space-y-1">
+              <li>Administrative Assistance — Emails, appointments, daily tasks</li>
+              <li>Data Entry & File Management — Organized & accessible data</li>
+              <li>HR Support & Hiring — Streamlined processes & incentive plans</li>
+              <li>Invoice Processing — Accurate & timely billing</li>
+              <li>Project Management — On-time milestones</li>
+              <li>Appointment Scheduling & Personal Assistance</li>
+              <li>Online Research — Relevant, structured results</li>
+            </ul>
+
+            <p class="text-sm">Connect &amp; DM ✉️ to know how I can streamline your daily workflow ☝️</p>
+          </div>
 
           <div class="mt-6 flex gap-4">
-            <a href="#projects" class="px-5 py-3 border border-indigo-600 text-indigo-600 rounded-lg">See Portfolio</a>
-            <a href="https://drive.google.com/uc?export=download&id=1s_Pc9gNtZn33awkQ57HSWpuasgrr1I70" class="px-5 py-3 bg-indigo-600 text-white rounded-lg inline-flex items-center gap-2">Download</a>
+            <a href="#projects" class="px-5 py-3 bg-white border border-violet-200 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition">See Work</a>
+            <a href="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Prateek_Pathak_Portfolio.pdf" class="px-5 py-3 bg-violet-600 text-white rounded-lg inline-flex items-center gap-2">Download Portfolio</a>
           </div>
 
           <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-white rounded-lg p-4 shadow float text-center"><div class="text-sm text-gray-500">Clients</div><div class="text-xl font-semibold">Maruti, Airtel</div></div>
-            <div class="bg-white rounded-lg p-4 shadow float text-center"><div class="text-sm text-gray-500">BOQ Value</div><div class="text-xl font-semibold"><span class="count" data-target="11">0</span> Cr</div></div>
-            <div class="bg-white rounded-lg p-4 shadow float text-center"><div class="text-sm text-gray-500">Experience</div><div class="text-xl font-semibold">2+ yrs</div></div>
-            <div class="bg-white rounded-lg p-4 shadow float text-center"><div class="text-sm text-gray-500">Skills</div><div class="text-xl font-semibold">Excel · BOQ · EHS</div></div>
+            <div class="p-4 bg-white rounded-lg shadow text-center"><div class="text-sm text-gray-500">Clients</div><div class="text-xl font-semibold">Maruti, Airtel</div></div>
+            <div class="p-4 bg-white rounded-lg shadow text-center"><div class="text-sm text-gray-500">BOQ Value</div><div class="text-xl font-semibold"><span class="count" data-target="11">0</span> Cr</div></div>
+            <div class="p-4 bg-white rounded-lg shadow text-center"><div class="text-sm text-gray-500">Experience</div><div class="text-xl font-semibold">2+ yrs</div></div>
+            <div class="p-4 bg-white rounded-lg shadow text-center"><div class="text-sm text-gray-500">Availability</div><div class="text-xl font-semibold">Freelance</div></div>
           </div>
         </div>
 
-        <div class="flex items-center justify-center" data-aos="zoom-in" data-aos-delay="200">
-          <div class="w-full max-w-md rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-indigo-600 to-indigo-400 text-white p-8">
-            <div class="text-sm opacity-90">Project Coordinator</div>
-            <div class="mt-4 text-2xl font-bold">Prateek Pathak</div>
-            <div class="mt-2">Delivering accurate BOQs & compliant projects.</div>
+        <div class="relative flex items-center justify-center" data-aos="zoom-in" data-aos-delay="200">
+          <div class="absolute -top-10 -right-10 w-44 h-44 bg-violet-100 rounded-full blur-2xl opacity-70"></div>
+          <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-sm text-gray-400">Project Coordinator</div>
+            <div class="mt-3 text-2xl font-bold">Prateek Pathak</div>
+            <p class="mt-2 text-gray-600">Delivering accurate BOQs & compliant projects — on time.</p>
+            <div class="mt-4 flex gap-2 items-center">
+              <div class="text-xs text-gray-500">Contact:</div>
+              <div class="text-sm font-medium">+91 76783 17844</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section id="about" class="py-12 bg-white">
-      <div class="max-w-5xl mx-auto px-6">
-        <h2 class="text-2xl font-semibold" data-aos="fade-up">About</h2>
-        <p class="mt-4 text-gray-600" data-aos="fade-up" data-aos-delay="80">Results-driven Project Coordinator experienced in BOQs, EHS, HR compliance, vendor negotiation and Excel dashboards. I ensure on-time delivery and accurate billing.</p>
-        <div class="mt-6 grid md:grid-cols-3 gap-6">
-          <div class="p-4 bg-gray-50 rounded shadow" data-aos="fade-up" data-aos-delay="120"><h4 class="font-semibold">Core Skills</h4><ul class="mt-2 text-sm text-gray-600 list-disc pl-5"><li>BOQ & Costing</li><li>EHS/HR Compliance</li><li>Excel Dashboards</li></ul></div>
-          <div class="p-4 bg-gray-50 rounded shadow" data-aos="fade-up" data-aos-delay="160"><h4 class="font-semibold">Tools</h4><p class="mt-2 text-sm text-gray-600">Excel, AutoCAD (basic), Canva, MS Office</p></div>
-          <div class="p-4 bg-gray-50 rounded shadow" data-aos="fade-up" data-aos-delay="200"><h4 class="font-semibold">Contact</h4><p class="mt-2 text-sm text-gray-600">Faridabad, Haryana<br/>Social links below</p></div>
+    <!-- Lottie Scene (CDN primary + raw backup) -->
+    <section id="animated-scene" class="py-12" aria-label="Animated explanation">
+      <div class="max-w-6xl mx-auto px-6 bg-white rounded-2xl shadow p-6 grid md:grid-cols-2 gap-6 items-center">
+        <div class="flex flex-col items-center" data-aos="zoom-in">
+          <!-- CDN primary -->
+          <lottie-player id="lottieVA"
+            src="https://cdn.jsdelivr.net/gh/prateek-lottie/animations/va.json"
+            data-backup="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/animations/va.json"
+            background="transparent" speed="1" style="width:280px; height:280px;" loop autoplay>
+          </lottie-player>
+          <div class="mt-3 text-sm text-gray-700 text-center">I handle operations so you can lead.</div>
+        </div>
+
+        <div class="flex flex-col items-center" data-aos="zoom-in" data-aos-delay="150">
+          <lottie-player id="lottieFounder"
+            src="https://cdn.jsdelivr.net/gh/prateek-lottie/animations/founder.json"
+            data-backup="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/animations/founder.json"
+            background="transparent" speed="1" style="width:280px; height:280px;" loop autoplay>
+          </lottie-player>
+
+          <div class="mt-3 p-3 bg-violet-50 rounded-lg text-sm text-gray-800 max-w-sm">
+            <strong>Here’s how I help:</strong>
+            <ul class="mt-2 space-y-1">
+              <li>• Manage emails, files & appointments</li>
+              <li>• HR support & invoice processing</li>
+              <li>• Data entry & online research</li>
+              <li>• Project & task management</li>
+            </ul>
+            <p class="mt-3">Let’s simplify your workflow and save hours every week.</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // fallback: if player doesn't upgrade (403/CORS), swap to backup raw.githubusercontent URL
+        function tryLottieBackup(id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          setTimeout(() => {
+            const success = !!el.shadowRoot;
+            if (!success) {
+              const backup = el.getAttribute('data-backup');
+              if (backup && el.getAttribute('src') !== backup) {
+                el.setAttribute('src', backup);
+                // replace element to force reload
+                const parent = el.parentNode;
+                const clone = el.cloneNode(true);
+                parent.replaceChild(clone, el);
+              }
+            }
+          }, 1600);
+        }
+        document.addEventListener('DOMContentLoaded', ()=> {
+          tryLottieBackup('lottieVA');
+          tryLottieBackup('lottieFounder');
+        });
+      </script>
+    </section>
+
+    <!-- Services & Skills -->
+    <section class="py-8 bg-gray-50">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-xl font-semibold mb-4">Services & Expertise</h3>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">AA</div>
+            <div><div class="font-semibold text-sm">Administrative Assistance</div><div class="text-xs text-gray-500">Manage emails, schedules & admin</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">DE</div>
+            <div><div class="font-semibold text-sm">Data Entry</div><div class="text-xs text-gray-500">Accurate and fast</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">FM</div>
+            <div><div class="font-semibold text-sm">File Management</div><div class="text-xs text-gray-500">Organised documents & links</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">HR</div>
+            <div><div class="font-semibold text-sm">Human Resources</div><div class="text-xs text-gray-500">Hiring & incentive plans</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">IP</div>
+            <div><div class="font-semibold text-sm">Invoice Processing</div><div class="text-xs text-gray-500">Accurate billing</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">PM</div>
+            <div><div class="font-semibold text-sm">Project Management</div><div class="text-xs text-gray-500">Milestones & reporting</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">AS</div>
+            <div><div class="font-semibold text-sm">Appointment Scheduling</div><div class="text-xs text-gray-500">Never miss a meeting</div></div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">OR</div>
+            <div><div class="font-semibold text-sm">Online Research</div><div class="text-xs text-gray-500">Organised findings</div></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- PORTFOLIO -->
+    <!-- Portfolio & Downloads (all here) -->
     <section id="projects" class="py-12">
       <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl font-semibold" data-aos="fade-up">Portfolio</h2>
-        <p class="text-gray-600 mt-2" data-aos="fade-up" data-aos-delay="80">Sample deliverables: BOQs, EHS templates, dashboards and SOPs.</p>
+        <h3 class="text-2xl font-semibold">Portfolio — Downloads</h3>
+        <p class="text-gray-600 mt-2">All deliverables and templates are here — BOQs, HIRA, EHS, Method Statements, QAP and others.</p>
 
-        <div class="mt-6 grid md:grid-cols-3 gap-6">
-          <div class="bg-white rounded-lg shadow p-6 float" data-aos="fade-up">
-            <h3 class="font-semibold">BOQ Sample</h3>
-            <p class="mt-2 text-sm text-gray-600">Sanitised BOQ sample (download).</p>
-            <div class="mt-4 flex gap-3">
-              <a href="https://docs.google.com/spreadsheets/d/1HM9a4IOuvpOCvOR_TY-G2JarK0cLh_2x/export?format=xlsx" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-indigo-600 text-white rounded">Download BOQ Sample</a>
-              <a href="#case-studies" class="px-3 py-1.5 border rounded">Case Study</a>
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">BOQ Sample (Sanitised)</h4>
+            <p class="mt-2 text-sm text-gray-600">A sanitized BOQ sample showing multi-discipline costing.</p>
+            <div class="mt-4"><a href="https://docs.google.com/spreadsheets/d/1HM9a4IOuvpOCvOR_TY-G2JarK0cLh_2x/export?format=xlsx" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Download BOQ Sample</a></div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">₹11 Cr BOQ</h4>
+            <p class="mt-2 text-sm text-gray-600">Full BOQ for a multi-discipline industrial project.</p>
+            <div class="mt-4"><a href="https://docs.google.com/spreadsheets/d/1GOagZ0ICJ21mEiTPPMBiy20nc529dXVS/export?format=xlsx" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Download 11 Cr BOQ</a></div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">EHS Monthly Report</h4>
+            <p class="mt-2 text-sm text-gray-600">Editable monthly EHS reporting template.</p>
+            <div class="mt-4"><a href="https://docs.google.com/spreadsheets/d/1O05A2PoerQmhNXh5AhuGFuP2NfV7TNY0/export?format=xlsx" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Download EHS Report</a></div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">HIRA Documents</h4>
+            <p class="mt-2 text-sm text-gray-600">Hazard Identification & Risk Assessment docs.</p>
+            <div class="mt-4 flex gap-2">
+              <a href="https://docs.google.com/document/d/1l1nuTmgxmpLbbFQuFzwVqfO16o9LkyYL/export?format=pdf" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Download HIRA 1</a>
+              <a href="https://docs.google.com/document/d/1jqHabNf2e0bCUud7cAetarakMNBDz9Cg/export?format=pdf" target="_blank" class="px-3 py-1.5 border rounded">Download HIRA 2</a>
             </div>
           </div>
 
-          <div class="bg-white rounded-lg shadow p-6 float" data-aos="fade-up" data-aos-delay="80">
-            <h3 class="font-semibold">11 Cr BOQ</h3>
-            <p class="mt-2 text-sm text-gray-600">Complete 11 Cr BOQ (download).</p>
-            <div class="mt-4 flex gap-3">
-              <a href="https://docs.google.com/spreadsheets/d/1GOagZ0ICJ21mEiTPPMBiy20nc529dXVS/export?format=xlsx" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-indigo-600 text-white rounded">Download 11 Cr BOQ</a>
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">Labour Compliance (Folder)</h4>
+            <p class="mt-2 text-sm text-gray-600">Contains 8 documents (open folder).</p>
+            <div class="mt-4"><a href="https://drive.google.com/drive/folders/1z78INJ8JcK8JEsVfRLNIQ8ik41Yqnzmt?usp=drive_link" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Open Labour Folder</a></div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">Method Statements</h4>
+            <p class="mt-2 text-sm text-gray-600">Detailed method statements for site activities.</p>
+            <div class="mt-4 flex gap-2">
+              <a href="https://drive.google.com/uc?export=download&id=1H24xZ4O8gApS6FTW9n5RwU6jhMt4SJry" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Download MS 1</a>
+              <a href="https://drive.google.com/uc?export=download&id=1uxcD6qDTSFZBwkr-QY-Ov5739jZ4pGzm" target="_blank" class="px-3 py-1.5 border rounded">Download MS 2</a>
             </div>
           </div>
 
-          <div class="bg-white rounded-lg shadow p-6 float" data-aos="fade-up" data-aos-delay="160">
-            <h3 class="font-semibold">EHS Monthly Report</h3>
-            <p class="mt-2 text-sm text-gray-600">Monthly EHS template (download).</p>
-            <div class="mt-4 flex gap-3">
-              <a href="https://docs.google.com/spreadsheets/d/1O05A2PoerQmhNXh5AhuGFuP2NfV7TNY0/export?format=xlsx" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-indigo-600 text-white rounded">Download EHS Report</a>
-            </div>
+          <div class="bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">Quality Assurance Plan (QAP)</h4>
+            <p class="mt-2 text-sm text-gray-600">Quality plan for site & procurement.</p>
+            <div class="mt-4"><a href="https://drive.google.com/uc?export=download&id=1s_Pc9gNtZn33awkQ57HSWpuasgrr1I70" target="_blank" class="px-3 py-1.5 bg-violet-600 text-white rounded">Download QAP</a></div>
+          </div>
+
+          <div class="md:col-span-2 bg-white rounded-lg shadow p-6">
+            <h4 class="font-semibold">Full Portfolio PDF</h4>
+            <p class="mt-2 text-sm text-gray-600">Complete portfolio with samples & templates.</p>
+            <div class="mt-4"><a href="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Prateek_Pathak_Portfolio.pdf" target="_blank" class="px-4 py-2 bg-violet-600 text-white rounded">Download Full Portfolio</a></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CLIENTS MARQUEE -->
-    <section id="clients" class="py-10 bg-gradient-to-b from-white to-gray-50">
+    <!-- Clients marquee -->
+    <section id="clients" class="py-10 bg-white">
       <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl font-semibold" data-aos="fade-up">Clients / Projects I’ve Worked With</h2>
-        <div class="mt-4 overflow-hidden" data-aos="fade-up" data-aos-delay="80">
+        <h3 class="text-xl font-semibold mb-4">Trusted by</h3>
+        <div class="overflow-hidden">
           <div class="marquee">
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Abinbev.jpg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/CBRE%20Logo.jpeg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Maruti%20Logo.jpg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Nxtra%20logo.jpeg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Reliance%20Logo.jpg" class="h-12 opacity-90" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Abinbev.jpg" class="h-12 opacity-90" alt="Abinbev" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/CBRE%20Logo.jpeg" class="h-12 opacity-90" alt="CBRE" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Maruti%20Logo.jpg" class="h-12 opacity-90" alt="Maruti" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Nxtra%20logo.jpeg" class="h-12 opacity-90" alt="Nxtra" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Reliance%20Logo.jpg" class="h-12 opacity-90" alt="Reliance" />
 
-            <!-- duplicate for smooth loop -->
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Abinbev.jpg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/CBRE%20Logo.jpeg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Maruti%20Logo.jpg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Nxtra%20logo.jpeg" class="h-12 opacity-90" />
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Reliance%20Logo.jpg" class="h-12 opacity-90" />
+            <!-- duplicate to loop -->
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Abinbev.jpg" class="h-12 opacity-90" alt="Abinbev" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/CBRE%20Logo.jpeg" class="h-12 opacity-90" alt="CBRE" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Maruti%20Logo.jpg" class="h-12 opacity-90" alt="Maruti" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Nxtra%20logo.jpeg" class="h-12 opacity-90" alt="Nxtra" />
+            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/Reliance%20Logo.jpg" class="h-12 opacity-90" alt="Reliance" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CASE STUDIES -->
-    <section id="case-studies" class="py-12 bg-white">
+    <!-- Experience & Achievements -->
+    <section id="experience" class="py-12 bg-gray-50">
       <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl font-semibold" data-aos="fade-up">Case Studies</h2>
-        <div class="mt-6 grid md:grid-cols-3 gap-6">
-          <article class="p-6 bg-gray-50 rounded shadow" data-aos="fade-up"><h4 class="font-semibold">Reducing Material Wastage</h4><p class="mt-2 text-sm text-gray-600">Implemented tracking system that improved billing accuracy & sped RA approvals.</p></article>
-          <article class="p-6 bg-gray-50 rounded shadow" data-aos="fade-up" data-aos-delay="60"><h4 class="font-semibold">₹11 Cr BOQ</h4><p class="mt-2 text-sm text-gray-600">Prepared multi-discipline BOQ with vendor negotiation & procurement clarity.</p></article>
-          <article class="p-6 bg-gray-50 rounded shadow" data-aos="fade-up" data-aos-delay="120"><h4 class="font-semibold">Operations Revival</h4><p class="mt-2 text-sm text-gray-600">Overhauled hiring & pricing strategy to revive operations & improve sales.</p></article>
+        <h3 class="text-2xl font-semibold mb-6">Experience & Achievements</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow">
+            <div class="timeline">
+              <div class="timeline-item" data-aos="fade-up">
+                <div class="dot">VA</div>
+                <h4 class="ml-8 font-semibold">Virtual Assistant — Self-employed</h4>
+                <p class="ml-8 text-sm text-gray-500">Oct 2025 – Present · Remote</p>
+                <ul class="ml-8 mt-2 text-sm text-gray-700 list-disc pl-5">
+                  <li>Developed SOPs, managed clients, created dashboards & BOQs.</li>
+                  <li>Streamlined hiring & incentive plans — improved retention.</li>
+                </ul>
+              </div>
+
+              <div class="timeline-item" data-aos="fade-up" data-aos-delay="60">
+                <div class="dot">NE</div>
+                <h4 class="ml-8 font-semibold">Operations Executive — Novac Engineering</h4>
+                <p class="ml-8 text-sm text-gray-500">Jun 2023 – Present · New Delhi</p>
+                <ul class="ml-8 mt-2 text-sm text-gray-700 list-disc pl-5">
+                  <li>Managed project timelines, budgets & teams.</li>
+                  <li>Implemented SOPs & improved internal processes.</li>
+                </ul>
+              </div>
+
+              <div class="timeline-item" data-aos="fade-up" data-aos-delay="120">
+                <div class="dot">BS</div>
+                <h4 class="ml-8 font-semibold">Operations Executive — Beu Smart Salons</h4>
+                <p class="ml-8 text-sm text-gray-500">Jun 2022 – May 2023 · New Delhi</p>
+                <ul class="ml-8 mt-2 text-sm text-gray-700 list-disc pl-5">
+                  <li>Built SOPs & training programs for operations.</li>
+                  <li>Managed incentive plans & membership offers.</li>
+                </ul>
+              </div>
+
+              <div class="timeline-item" data-aos="fade-up" data-aos-delay="180">
+                <div class="dot">MW</div>
+                <h4 class="ml-8 font-semibold">Purchase Executive — MaxWholesale (99Algorithm)</h4>
+                <p class="ml-8 text-sm text-gray-500">May 2018 – Aug 2020 · New Delhi</p>
+                <ul class="ml-8 mt-2 text-sm text-gray-700 list-disc pl-5">
+                  <li>Managed procurement, vendor negotiation & reporting.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow">
+              <h4 class="font-semibold">Key Achievements</h4>
+              <ul class="mt-3 text-sm text-gray-700 list-disc pl-5">
+                <li>Reduced billing errors & sped RA approvals.</li>
+                <li>Implemented SOPs across teams with measurable gains.</li>
+                <li>Delivered ₹11 Cr BOQ with procurement clarity.</li>
+              </ul>
+            </div>
+
+            <div class="bg-violet-600 text-white p-6 rounded" data-aos="fade-up" data-aos-delay="60">
+              <div class="text-sm">Experience summary</div>
+              <div class="mt-2 text-3xl font-bold">2+ years</div>
+              <div class="text-sm mt-1">Project Coordination & Virtual Assistance</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow">
+              <h4 class="font-semibold">Tools & Tech</h4>
+              <div class="mt-2 text-sm text-gray-700">MS Excel, Google Sheets, AutoCAD (basic), Canva</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- TEMPLATES & DOCS -->
-    <section id="templates" class="py-12">
-      <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl font-semibold" data-aos="fade-up">Docs & Templates</h2>
-        <div class="mt-6 grid md:grid-cols-3 gap-6">
-          <div class="bg-white rounded-lg shadow p-6" data-aos="fade-up"><h4 class="font-semibold">HIRA Doc 1</h4><p class="text-sm text-gray-600 mt-2">HIRA document</p><a href="https://docs.google.com/document/d/1l1nuTmgxmpLbbFQuFzwVqfO16o9LkyYL/export?format=pdf" class="mt-3 inline-block bg-indigo-600 text-white px-3 py-1.5 rounded">Download</a></div>
-          <div class="bg-white rounded-lg shadow p-6" data-aos="fade-up" data-aos-delay="40"><h4 class="font-semibold">HIRA Doc 2</h4><p class="text-sm text-gray-600 mt-2">Alternative HIRA</p><a href="https://docs.google.com/document/d/1jqHabNf2e0bCUud7cAetarakMNBDz9Cg/export?format=pdf" class="mt-3 inline-block bg-indigo-600 text-white px-3 py-1.5 rounded">Download</a></div>
-          <div class="bg-white rounded-lg shadow p-6" data-aos="fade-up" data-aos-delay="80"><h4 class="font-semibold">Labour Compliance</h4><p class="text-sm text-gray-600 mt-2">Folder (8 files)</p><a href="https://drive.google.com/drive/folders/1z78INJ8JcK8JEsVfRLNIQ8ik41Yqnzmt?usp=drive_link" target="_blank" class="mt-3 inline-block bg-indigo-600 text-white px-3 py-1.5 rounded">Open Folder</a></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
+    <!-- Contact -->
     <section id="contact" class="py-12 bg-white">
       <div class="max-w-4xl mx-auto px-6 text-center">
-        <h2 class="text-2xl font-semibold" data-aos="fade-up">Get in Touch</h2>
-        <p class="mt-2 text-gray-600" data-aos="fade-up" data-aos-delay="60">Click below icon to contact me however you are comfortable</p>
+        <h3 class="text-2xl font-semibold">Let’s talk</h3>
+        <p class="mt-2 text-gray-600">Click below icon to contact me however you are comfortable</p>
 
-        <div class="mt-6 flex justify-center gap-4" data-aos="fade-up" data-aos-delay="120">
+        <div class="mt-6 flex justify-center gap-4">
+          <a href="https://www.linkedin.com/in/prateek-pathak-698756166/" target="_blank" rel="noopener" class="p-3 bg-white rounded-full shadow"><img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/linkedin%20logo.jpg" class="w-7 h-7" alt="LinkedIn" onerror="this.src='https://via.placeholder.com/36?text=IN'"></a>
 
-          <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/in/prateek-pathak-698756166/" target="_blank" class="p-3 rounded-full bg-white shadow">
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/linkedin%20logo.jpg" class="w-7 h-7" alt="LinkedIn" onerror="this.src='https://via.placeholder.com/36?text=IN'">
-          </a>
+          <a href="https://www.instagram.com/delegate_to_prateek/" target="_blank" rel="noopener" class="p-3 bg-white rounded-full shadow"><img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/insta%20logo.jpg" class="w-7 h-7" alt="Instagram" onerror="this.src='https://via.placeholder.com/36?text=IG'"></a>
 
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/delegate_to_prateek/" target="_blank" class="p-3 rounded-full bg-white shadow">
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/insta%20logo.jpg" class="w-7 h-7" alt="Instagram" onerror="this.src='https://via.placeholder.com/36?text=IG'">
-          </a>
-
-          <!-- WhatsApp (direct chat) -->
-          <a href="https://wa.me/917678317844" target="_blank" class="p-3 rounded-full bg-white shadow" aria-label="WhatsApp">
-            <img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/whastapp%20logo.png.jpg" class="w-7 h-7" alt="WhatsApp" onerror="this.src='https://via.placeholder.com/36?text=WA'">
-          </a>
-
+          <a href="https://wa.me/917678317844" target="_blank" rel="noopener" class="p-3 bg-white rounded-full shadow" aria-label="WhatsApp"><img src="https://raw.githubusercontent.com/delegate-to-prateek/prateek-portfolio_new/main/files/clients/whastapp%20logo.png.jpg" class="w-7 h-7" alt="WhatsApp" onerror="this.src='https://via.placeholder.com/36?text=WA'"></a>
         </div>
+
+        <div class="mt-6 text-sm text-gray-500">Or email: <a href="mailto:Pathakprateek456@gmail.com" class="text-violet-600">Pathakprateek456@gmail.com</a></div>
       </div>
     </section>
 
@@ -217,12 +416,15 @@
   <footer class="py-8 text-center text-sm text-gray-500">© <span id="yr"></span> Delegate to Prateek — Project Coordination & Virtual Assistance</footer>
 
   <script>
-    AOS.init({ once: true, duration: 700 });
+    // AOS init
+    document.addEventListener('DOMContentLoaded', function() { AOS.init({ once:true, duration:700 }); });
 
+    // mobile toggle
     document.getElementById('mobileBtn').addEventListener('click', ()=> {
       const m = document.getElementById('mobileMenu'); m.classList.toggle('hidden');
     });
 
+    // header show/hide on scroll
     let lastScroll = 0;
     const header = document.querySelector('header.site-header');
     window.addEventListener('scroll', () => {
@@ -231,11 +433,19 @@
       lastScroll = s;
     }, { passive: true });
 
+    // counter animation
     document.querySelectorAll('.count').forEach(el => {
-      const target = +el.dataset.target || 0; let cur = 0; const step = Math.max(1, Math.round(target / 60));
-      const timer = setInterval(() => { cur += step; if (cur >= target) { cur = target; clearInterval(timer); } el.textContent = cur; }, 20);
+      const target = +el.dataset.target || 0;
+      let cur = 0;
+      const step = Math.max(1, Math.round(target / 60));
+      const timer = setInterval(() => {
+        cur += step;
+        if (cur >= target) { cur = target; clearInterval(timer); }
+        el.textContent = cur;
+      }, 20);
     });
 
+    // year
     document.getElementById('yr').textContent = new Date().getFullYear();
   </script>
 </body>
